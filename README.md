@@ -3,7 +3,7 @@
 ## Lets typing !
 
 - 開発環境での起動方法(win、mac共通)
-  - git clone https://gitlab.team-vitalize.com/maebashi/karuta_typing.git
+  - git clone https://github.com/yohei-koba-vitalize/karuta_typing.git
   - git pull origin master
   - node_modulesを削除
   - npm install
