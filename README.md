@@ -6,7 +6,7 @@
   - `git clone https://github.com/yohei-koba-vitalize/karuta_typing.git`
   - `git pull origin master`
   - `npm install`
-  - 環境変数ファイル ".env" を以下の通り ”/karuta_typing/" ディレクトリ配下に格納する
+  - 環境変数ファイル ".env" を以下の通り ”/karuta_typing/" ディレクトリ配下に格納する (環境変数ファイル.envは、コラボレーターに展開を依頼してください)
   - `npm run dev`
 
 <br />
