@@ -1,11 +1,12 @@
 <script>
   import { onMount } from "svelte";
 	import Header from "./components/atoms/Header.svelte";
-	import { isLogin, name, gameStatus } from "./lib/store.js";
+	import { isLogin, name, gameStatus } from "./lib/store.ts";
 	import Game from "./pages/Game.svelte";
 	import Ranking from "./pages/Ranking.svelte";
 	import Result from "./pages/Result.svelte";
 	import Start from "./pages/Start.svelte";
+	import Edit from "./pages/Editing.svelte";
 	import { getAuth, signInWithPopup, GoogleAuthProvider } from 'firebase/auth';
 
 	let keyStrokeSound;
@@ -55,6 +56,8 @@
 		<Result />
 	{:else if $gameStatus === "RANKING"}
 		<Ranking />
+	{:else if $gameStatus === "EDITING"}
+		<Edit />
 	{/if}
 	<a href="https://www.instagram.com/legrobeats_yohei_vitalize/">
 		<img class="qr-code" src={"/yohei_vitalize.png"} alt="instagram_yohei" />

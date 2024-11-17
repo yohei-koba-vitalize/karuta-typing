@@ -3,7 +3,7 @@
   import Button from "../components/atoms/Button.svelte";
   import { CHAR_TABLE } from "../constants/TypingData.js";
   import { getCards } from "../lib/api.js";
-  import { gameStatus, playTimeText, result, subResult } from "../lib/store.js";
+  import { gameStatus, playTimeText, result, subResult } from "../lib/store.ts";
   const dispatch = createEventDispatcher();
 
   // 変数定義

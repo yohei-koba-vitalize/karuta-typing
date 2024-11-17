@@ -1,7 +1,7 @@
 <script>
   import { createEventDispatcher, onDestroy, onMount } from "svelte";
   import Button from "../components/atoms/Button.svelte";
-  import { gameStatus, name } from "../lib/store.js";
+  import { gameStatus, name } from "../lib/store.ts";
   const dispatch = createEventDispatcher();
 
   onMount(() => {

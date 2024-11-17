@@ -1,5 +1,5 @@
 <script>
-  import { gameStatus, playTimeText, result } from "../../lib/store.js";
+  import { gameStatus, playTimeText, result } from "../../lib/store.ts";
 
   function toRanking() {
     $gameStatus = "RANKING";

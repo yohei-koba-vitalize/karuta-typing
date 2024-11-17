@@ -1,9 +1,10 @@
-<script>
+<script lang="ts">
   import { collection, onSnapshot } from "firebase/firestore";
   import { onDestroy, onMount } from "svelte";
   import { mainConfig } from "../constants/config.const.js";
   import { getResults } from "../lib/api";
   import { db } from "../lib/firebase";
+  import { editingData, gameStatus, Result } from "../lib/store.ts";
 
   const pageSize = mainConfig.rankingPageSize;
   const root = document.documentElement;
@@ -60,6 +61,11 @@
     );
     return unsubscribe;
   };
+
+  function editRanking(data: Result) {
+    $editingData = data;
+    $gameStatus = "EDITING";
+  }
 </script>
 
 <dev class="container">
@@ -70,19 +76,35 @@
         <th><i class="fa-solid fa-user" />ニックネーム</th>
         <th><i class="fa-solid fa-check" />札の数</th>
         <th><i class="fa-solid fa-xmark" />お手つき</th>
+        <th><i class="bi bi-pencil-square" />編集</th>
       </tr>
     </thead>
     <tbody>
       {#each currentPageData as data, index}
         <tr>
-          <td class="ranking-crown-col">{(currentPage - 1) * pageSize + index + 1} <span class="ranking-small"> 位</span></td>
-          <td class="ranking-name-col">{data.name} <span class="ranking-small"> さん</span></td>
-          <td class="ranking-result-col">{data.result} <span class="ranking-small"> 枚</span></td>
-          <td class="ranking-sub-result-col">{data.sub_result} <span class="ranking-small"> 回</span></td>
+          <td class="ranking-crown-col"
+            >{(currentPage - 1) * pageSize + index + 1}
+            <span class="ranking-small"> 位</span></td
+          >
+          <td class="ranking-name-col"
+            >{data.name} <span class="ranking-small"> さん</span></td
+          >
+          <td class="ranking-result-col"
+            >{data.result} <span class="ranking-small"> 枚</span></td
+          >
+          <td class="ranking-sub-result-col"
+            >{data.sub_result} <span class="ranking-small"> 回</span></td
+          >
+          <td class="ranking-edit-col">
+            <button on:click={() => editRanking(data)}
+              ><i class="bi bi-pencil-square" /></button
+            >
+          </td>
         </tr>
       {/each}
       {#each Array.from({ length: pageSize - currentPageData.length }) as _}
         <tr>
+          <td />
           <td />
           <td />
           <td />
@@ -137,13 +159,18 @@
   }
 
   .ranking-crown-col {
-    width: 11%;
+    width: 10%;
   }
 
-  .ranking-result-col, .ranking-sub-result-col {
-    width: 17%
+  .ranking-result-col,
+  .ranking-sub-result-col {
+    width: 15%;
   }
   .ranking-name-col {
-    width: 55%;
+    width: 50%;
+  }
+
+  .ranking-edit-col {
+    width: 10%;
   }
 </style>
