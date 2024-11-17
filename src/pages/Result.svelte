@@ -8,7 +8,7 @@
     playTimeText,
     result,
     subResult,
-  } from "../lib/store.js";
+  } from "../lib/store.ts";
 
   let userId = "";
   let rank = 0;

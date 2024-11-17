@@ -1,4 +1,15 @@
-import { addDoc, collection, doc, getDocs, query, runTransaction, serverTimestamp, updateDoc, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  getDocs,
+  query,
+  runTransaction,
+  serverTimestamp,
+  updateDoc,
+  deleteDoc,
+  where,
+} from "firebase/firestore";
 import { db } from "./firebase.js";
 
 /**
@@ -16,7 +27,34 @@ export const addResult = async (name, result, subResult) => {
     created_at: serverTimestamp(),
   });
   console.log("Document written with ID: ", docRef.id);
-  return docRef.id
+  return docRef.id;
+};
+
+/**
+ * Firestoreにアクセスし、既存のresultを変更します。
+ * @param {string} id
+ * @param {string} name
+ * @param {number} result
+ * @param {number} subResult
+ * @return {void}
+ */
+export const updateResult = async (id, name, result, subResult) => {
+  const userRef = doc(collection(db, "event_results"), id);
+  await updateDoc(userRef, {
+    name: name,
+    result: result,
+    sub_result: subResult,
+    // updated_at: serverTimestamp(),
+  });
+};
+
+/**
+ * Firestoreからデータを削除します。
+ * @param {string} id
+ * @return {void}
+ */
+export const deleteResult = async (id) => {
+  await deleteDoc(doc(db, "event_results", id));
 };
 
 /**
@@ -27,7 +65,10 @@ export const addResult = async (name, result, subResult) => {
 export const getResults = async () => {
   // Firestoreから結果一覧を取得する
   const querySnapshot = await getDocs(collection(db, "event_results"));
-  const results = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+  const results = querySnapshot.docs.map((doc) => ({
+    id: doc.id,
+    ...doc.data(),
+  }));
 
   // 取得した成績一覧情報を順位でソートする
   const sortedResults = results.sort((a, b) => {
@@ -36,13 +77,13 @@ export const getResults = async () => {
     }
     return b.result - a.result; // resultで降順ソート
   });
-  return sortedResults
-}
+  return sortedResults;
+};
 
 export const getCards = async () => {
   const querySnapshot = await getDocs(collection(db, "cards"));
-  return querySnapshot
-}
+  return querySnapshot;
+};
 
 /**
  * ターゲットとなるresultのdocument_Idを受け取り、順位を返します。
@@ -53,10 +94,10 @@ export const getCards = async () => {
 export const getRank = async (targetId) => {
   const sortedResults = await getResults();
   // 特定のIDの順位を取得する
-  const targetResult = sortedResults.find(score => score.id === targetId);
+  const targetResult = sortedResults.find((score) => score.id === targetId);
   const rank = sortedResults.indexOf(targetResult) + 1;
   return [rank, sortedResults.length];
-}
+};
 
 /**
  * ターゲットとなるresultのfeeling(感想)をアップデートします。
@@ -64,9 +105,9 @@ export const getRank = async (targetId) => {
  * @param {string} feeling 感想
  */
 export const setFeeling = async (targetId, feeling) => {
-  const userRef = doc(collection(db, 'event_results'), targetId);
+  const userRef = doc(collection(db, "event_results"), targetId);
   await updateDoc(userRef, { feeling });
-}
+};
 
 /**
  * 条件に当てはまるdocumentを全て削除する(イベント直前に不要なresultを削除するためのメソッド)
@@ -77,7 +118,12 @@ export const setFeeling = async (targetId, feeling) => {
  * @param {number} value 条件3: 値
  * @return {boolean} 実行結果
  */
-export const deleteDocuments = async (collectionName, fieldName, operator, value) => {
+export const deleteDocuments = async (
+  collectionName,
+  fieldName,
+  operator,
+  value
+) => {
   try {
     const collectionRef = collection(db, collectionName);
     const q = query(collectionRef, where(fieldName, operator, value));
@@ -92,4 +138,4 @@ export const deleteDocuments = async (collectionName, fieldName, operator, value
     console.error(error);
     return false;
   }
-}
+};
